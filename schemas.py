@@ -1,48 +1,82 @@
 """
-Database Schemas
+Database Schemas for EvenTheField
 
-Define your MongoDB collection schemas here using Pydantic models.
-These schemas are used for data validation in your application.
-
-Each Pydantic model represents a collection in your database.
-Model name is converted to lowercase for the collection name:
-- User -> "user" collection
-- Product -> "product" collection
-- BlogPost -> "blogs" collection
+Each Pydantic model represents a collection in MongoDB.
+Collection name is the lowercase of the class name.
 """
 
 from pydantic import BaseModel, Field
-from typing import Optional
+from typing import Optional, List, Literal
+from datetime import datetime
 
-# Example schemas (replace with your own):
+# Core domain
+class Match(BaseModel):
+    competition: str = Field(..., description="Competition name, e.g., Premier League")
+    season: str = Field(..., description="Season identifier, e.g., 2024/25")
+    home_team: str
+    away_team: str
+    kickoff: datetime
+    match_id: Optional[str] = Field(None, description="External/provider match id")
+    status: Literal["scheduled", "in_play", "finished"] = "scheduled"
 
-class User(BaseModel):
-    """
-    Users collection schema
-    Collection name: "user" (lowercase of class name)
-    """
-    name: str = Field(..., description="Full name")
-    email: str = Field(..., description="Email address")
-    address: str = Field(..., description="Address")
-    age: Optional[int] = Field(None, ge=0, le=120, description="Age in years")
-    is_active: bool = Field(True, description="Whether user is active")
+class HistoricalMatch(BaseModel):
+    competition: str
+    season: str
+    date: datetime
+    home_team: str
+    away_team: str
+    home_goals: int
+    away_goals: int
+    match_id: Optional[str] = Field(None, description="If known, link to the scheduled match id")
+    # Optional richer context
+    home_lineup_rating: Optional[float] = Field(None, description="0-100 rating summarizing home lineup strength")
+    away_lineup_rating: Optional[float] = Field(None, description="0-100 rating summarizing away lineup strength")
 
-class Product(BaseModel):
-    """
-    Products collection schema
-    Collection name: "product" (lowercase of class name)
-    """
-    title: str = Field(..., description="Product title")
-    description: Optional[str] = Field(None, description="Product description")
-    price: float = Field(..., ge=0, description="Price in dollars")
-    category: str = Field(..., description="Product category")
-    in_stock: bool = Field(True, description="Whether product is in stock")
+class ModelConfig(BaseModel):
+    name: str = Field(..., description="Model name, e.g., soccer_v1")
+    created_at: Optional[datetime] = None
+    parameters: dict = Field(default_factory=dict)
+    notes: Optional[str] = None
 
-# Add your own schemas here:
-# --------------------------------------------------
+# Bet-along domain
+class Tipster(BaseModel):
+    display_name: str
+    bio: Optional[str] = None
+    twitter: Optional[str] = None
 
-# Note: The Flames database viewer will automatically:
-# 1. Read these schemas from GET /schema endpoint
-# 2. Use them for document validation when creating/editing
-# 3. Handle all database operations (CRUD) directly
-# 4. You don't need to create any database endpoints!
+class Follower(BaseModel):
+    email: str
+    name: Optional[str] = None
+
+class Subscription(BaseModel):
+    tipster_id: str
+    follower_id: str
+    started_at: datetime
+    status: Literal["active", "canceled"] = "active"
+    plan_name: str = "monthly"
+    price_cents: int = 0
+
+class Bet(BaseModel):
+    tipster_id: str
+    match_id: str
+    market: Literal["outright", "goals"]
+    selection: str  # e.g., "home", "draw", "away" or "over_2.5"
+    odds: float
+    stake: float
+    placed_at: datetime
+
+class Payment(BaseModel):
+    subscription_id: str
+    amount_cents: int
+    processed_at: datetime
+    tipster_share_cents: int
+    platform_share_cents: int
+
+class Notification(BaseModel):
+    follower_id: str
+    tipster_id: str
+    message: str
+    created_at: datetime
+    read: bool = False
+
+# The previous example schemas are not used in this app and were removed to avoid confusion.

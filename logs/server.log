@@ -1,0 +1,24 @@
+INFO:     Will watch for changes in these directories: ['/home/workspace']
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [156] using StatReload
+INFO:     Started server process [158]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     172.20.0.1:47442 - "HEAD / HTTP/1.1" 405 Method Not Allowed
+INFO:     172.20.0.1:57740 - "OPTIONS /api/matches HTTP/1.1" 200 OK
+INFO:     172.20.0.1:57740 - "POST /api/matches HTTP/1.1" 200 OK
+INFO:     172.20.0.1:57740 - "POST /api/matches HTTP/1.1" 200 OK
+INFO:     172.20.0.1:57740 - "POST /api/matches HTTP/1.1" 200 OK
+INFO:     172.20.0.1:57740 - "OPTIONS /api/historical HTTP/1.1" 200 OK
+INFO:     172.20.0.1:57740 - "POST /api/historical HTTP/1.1" 200 OK
+INFO:     172.20.0.1:57740 - "POST /api/historical HTTP/1.1" 200 OK
+INFO:     172.20.0.1:57740 - "POST /api/historical HTTP/1.1" 200 OK
+INFO:     172.20.0.1:57740 - "POST /api/historical HTTP/1.1" 200 OK
+INFO:     172.20.0.1:57740 - "POST /api/historical HTTP/1.1" 200 OK
+INFO:     172.20.0.1:47728 - "GET /api/matches HTTP/1.1" 200 OK
+INFO:     172.20.0.1:47728 - "GET /api/matches HTTP/1.1" 200 OK
+INFO:     172.20.0.1:47730 - "OPTIONS /api/model/train HTTP/1.1" 200 OK
+INFO:     172.20.0.1:47730 - "POST /api/model/train HTTP/1.1" 200 OK
+INFO:     172.20.0.1:47730 - "GET /api/matches HTTP/1.1" 200 OK
+INFO:     172.20.0.1:47730 - "OPTIONS /api/model/predict HTTP/1.1" 200 OK
+INFO:     172.20.0.1:47730 - "POST /api/model/predict HTTP/1.1" 200 OK
